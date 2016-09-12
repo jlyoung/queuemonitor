@@ -1,0 +1,6 @@
+pync==1.6.1
+python-dateutil==2.5.3
+PyYAML==3.12
+retrying==1.3.3
+selenium==2.53.6
+six==1.10.0
