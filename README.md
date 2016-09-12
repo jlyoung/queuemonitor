@@ -9,6 +9,11 @@
 - [Chrome WebDriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) installed at `/usr/local/bin/chromedriver`
 
 ## Installation
+Clone this repository to download the source:
+```
+git clone https://github.com/jlyoung/queuemonitor.git
+```
+
 Modify `credentials.yml`:
 - Replace `okta_username` with your actual Okta username.
 - Replace `okta_password` with your actual Okta password.
