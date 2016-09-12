@@ -6,6 +6,7 @@
 ## Requirements
 - OS X
 - Python version 2.6 or 2.7
+- [pip](https://pip.pypa.io/en/stable/installing/)
 - [Chrome WebDriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) installed at `/usr/local/bin/chromedriver`
 
 ## Installation
