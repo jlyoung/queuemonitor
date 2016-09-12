@@ -9,16 +9,16 @@
 - [Chrome WebDriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) installed at `/usr/local/bin/chromedriver`
 
 ## Installation
-Modify credentials.yml
+Modify `credentials.yml`:
 - Replace `okta_username` with your actual Okta username.
 - Replace `okta_password` with your actual Okta password.
 
-Install required packages
+Install required packages:
 ```
 pip install -r requirements.txt
 ```
 
-*Note:* If you receive an error message about not being able to upgrade the `six` module (**OSError: [Errno 1] Operation not permitted**), try:
+**Note:** If you receive an error message about not being able to upgrade the `six` module (*OSError: [Errno 1] Operation not permitted*), try:
 ```
 pip install -r requirements.txt --ignore-installed six
 ```
