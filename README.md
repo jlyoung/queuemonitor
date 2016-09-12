@@ -21,12 +21,12 @@ Modify `credentials.yml`:
 
 Install required packages:
 ```
-pip install -r requirements.txt
+sudo pip install -r requirements.txt
 ```
 
 **Note:** If you receive an error message about not being able to upgrade the `six` module (*OSError: [Errno 1] Operation not permitted*), try:
 ```
-pip install -r requirements.txt --ignore-installed six
+sudo pip install -r requirements.txt --ignore-installed six
 ```
 
 ## Usage
