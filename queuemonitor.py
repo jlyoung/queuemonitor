@@ -1,32 +1,40 @@
-import pprint, time, yaml, sys, logging
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import ElementNotVisibleException
-from selenium.common.exceptions import StaleElementReferenceException
+"""Raise Notification Center messages when new cases arrive in SalesForce Incoming Queue."""
+
+import logging
+import pprint
+import sys
+import time
 from urlparse import urljoin
-from sets import Set
+
+import yaml
 from pync import Notifier
 from retrying import retry
+from selenium import webdriver
+from selenium.common.exceptions import ElementNotVisibleException
+from selenium.common.exceptions import StaleElementReferenceException
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 logging.basicConfig(format='[%(asctime)s] %(message)s', level=logging.INFO)
 queue_front_page = set()
 
 def retry_if_stale_element_reference_exception(exception):
+	"""Return whether the exception is a StaleElementReferenceException exception."""
 	return isinstance(exception, StaleElementReferenceException)
 
 def retry_if_element_not_visible_exception(exception):
+	"""Return whether the exception is a ElementNotVisibleException exception."""
 	return isinstance(exception, ElementNotVisibleException)
 
 @retry(retry_on_exception=retry_if_stale_element_reference_exception)
 def check_queue(driver):
+	"""Reload the Incoming Queue page. Raise Notification Center message if there is a new case."""
 	global queue_front_page
 	time.sleep(10)
 	driver.find_element_by_id("00BE0000001ELz7_refresh").click()
-	x_grid3_body = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "x-grid3-body")))
+	WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "x-grid3-body")))
 	rows = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "x-grid3-row")))
 	pp = pprint.PrettyPrinter(indent=4)
 	for row in rows:
@@ -52,6 +60,7 @@ def check_queue(driver):
 
 @retry(retry_on_exception=retry_if_stale_element_reference_exception)
 def populate_cases(driver):
+	"""Populate the initial queue_front_page set with existing case information."""
 	global queue_front_page
 	pp = pprint.PrettyPrinter(indent=4)
 	time.sleep(1)
@@ -74,6 +83,7 @@ def populate_cases(driver):
 
 @retry(retry_on_exception=retry_if_element_not_visible_exception, wait_fixed=1000)
 def click_initial_response_column_header(driver):
+	"""Sort by Initial Response timestamp."""
 	title = "//div[@title='Initial Response Time']"
 	initial_response_time_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, title)))
 	time.sleep(2)
@@ -84,6 +94,7 @@ def click_initial_response_column_header(driver):
 
 
 def main():
+	"""Alert user via Notification Center messages when new cases arrive in Incoming Queue."""
 	global queue_front_page
 	username = None
 	password = None
@@ -91,12 +102,11 @@ def main():
 	with open("credentials.yml", "r") as stream:
 		try:
 			credentials = yaml.load(stream)
-			username=credentials["username"]
-			password=credentials["password"]
+			username = credentials["username"]
+			password = credentials["password"]
 		except yaml.YAMLError as exc:
 			logging.error(exc)
 			sys.exit(1)
-	pp = pprint.PrettyPrinter(indent=4)
 	chrome_options = Options()
 	chrome_options.add_argument("restore-last-session")
 	chrome_options.add_argument("start-maximized")
@@ -126,7 +136,7 @@ def main():
 	logging.info("Awaiting new case notifications...")
 	while True:
 		check_queue(driver)
-		
+
 
 if __name__ == '__main__':
 	try:
