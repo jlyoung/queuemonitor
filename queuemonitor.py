@@ -2,6 +2,7 @@
 
 import logging
 import pprint
+import subprocess
 import sys
 import time
 from urlparse import urljoin
@@ -51,6 +52,7 @@ def check_queue(driver):
 		if row_dict["case_number"] not in queue_front_page:
 			message = u"New {severity} case #{case_number}: {problem_statement}".format(severity=row_dict["severity"], case_number=row_dict["case_number"], problem_statement=row_dict["problem_statement"])
 			Notifier.notify(message, sound="Sosumi", open=row_dict["case_url"])
+			subprocess.call(['/usr/bin/say', '"New Case Notification"', '-v', 'Tessa'])
 			pp.pprint(row_dict)
 			logging.info(message)
 			logging.info(u"Adding case {case_number} to the set of known cases...".format(case_number=row_dict["case_number"]))
