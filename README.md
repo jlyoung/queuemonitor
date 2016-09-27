@@ -29,6 +29,20 @@ sudo pip install -r requirements.txt
 sudo pip install -r requirements.txt --ignore-installed six
 ```
 
+**Note:** The 1.6.1 version of the pync module available in pypi does not handle non-ascii characters. If you get the following error, upgrade pync directly from GitHub.
+
+### Error message: ###
+```
+  File "/Users/josephyoung/.virtualenvs/tempqueuemonitor/lib/python2.7/site-packages/pync/TerminalNotifier.py", line 77, in execute
+    args = [str(arg) for arg in args]
+UnicodeEncodeError: 'ascii' codec can't encode character u'\u2019' in position 50: ordinal not in range(128)
+```
+
+### Upgrading pync module: ###
+```
+sudo pip install --upgrade git+https://github.com/SeTeM/pync.git
+```
+
 ## Usage
 ```
 $ python queuemonitor.py
