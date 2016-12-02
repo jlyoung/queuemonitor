@@ -122,9 +122,13 @@ def main():
 	element = driver.find_element_by_name("password")
 	element.clear()
 	element.send_keys(password)
-	driver.find_element_by_id("remember").click()
+	time.sleep(5)
+	# "remember" checkbox changed and clicking on it isn't working anymore.
+	# removed the "remember me" checkbox check action
 	logging.info("Logging into Okta...")
-	driver.find_element_by_id("signin-button").click()
+	# Sign in button changed. Have to use a css selector to click on it now.
+	driver.find_element_by_css_selector("input[class='button button-primary']").click()
+	time.sleep(5)
 	logging.info("Accessing SalesForce Incoming Queue..")
 	driver.get("https://hortonworks.my.salesforce.com/500?fcf=00BE0000001ELz7")
 	logging.info("Sorting by Initial Response Time Descending...")
