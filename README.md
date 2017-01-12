@@ -49,5 +49,37 @@ $ python queuemonitor.py
 ```
 
 
+## Common Errors and Work-arounds
+### Problem:
+```
+(tempqueuemonitor) HW13524:queuemonitor josephyoung$ python queuemonitor.py 
+[2017-01-12 11:44:19,983] Accessing credentials...
+Traceback (most recent call last):
+  File "queuemonitor.py", line 152, in <module>
+    main()
+  File "queuemonitor.py", line 118, in main
+    driver = webdriver.Chrome(executable_path="/usr/local/bin/chromedriver", chrome_options=chrome_options)
+  File "/Users/josephyoung/.virtualenvs/tempqueuemonitor/lib/python2.7/site-packages/selenium/webdriver/chrome/webdriver.py", line 62, in __init__
+    self.service.start()
+  File "/Users/josephyoung/.virtualenvs/tempqueuemonitor/lib/python2.7/site-packages/selenium/webdriver/common/service.py", line 92, in start
+    raise WebDriverException("Can not connect to the Service %s" % self.path)
+selenium.common.exceptions.WebDriverException: Message: Can not connect to the Service /usr/local/bin/chromedriver
+```
+### Solution:
+Ensure /etc/hosts has an entry for localhost - 127.0.0.1
+```
+HW13524:~ josephyoung$ ping localhost
+ping: cannot resolve localhost: Unknown host
+HW13524:~ josephyoung$ sudo vim /etc/hosts
+127.0.0.1	localhost
 
-
+HW13524:~ josephyoung$ ping localhost
+PING localhost (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: icmp_seq=0 ttl=64 time=0.050 ms
+64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.120 ms
+64 bytes from 127.0.0.1: icmp_seq=2 ttl=64 time=0.128 ms
+^C
+--- localhost ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 0.050/0.099/0.128/0.035 ms
+```
